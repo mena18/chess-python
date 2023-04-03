@@ -30,6 +30,8 @@ class Game:
         Handler.screen.blit(self.background, self.background_rect)
         if self.game_logic.last_position:
             Handler.draw_square(self.game_logic.last_position)
+        if self.game_logic.finished_pos:
+            Handler.draw_square(self.game_logic.finished_pos,COLOR=(255,0,0))
         self.board.draw()
         for move in self.game_logic.list_available_moves:
             Handler.draw_possible_position(move)

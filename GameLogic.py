@@ -7,6 +7,7 @@ class GameLogic:
         self.list_available_moves = []
         self.last_position = None
         self.last_piece = None
+        self.finished_pos = None
 
     
     def change_player(self):
@@ -29,35 +30,45 @@ class GameLogic:
     def my_piece_code(self,piece,position):
         print("my piece",piece,position)
         available_moves = piece.generate_moevs(self.board,position)
-        self.list_available_moves = available_moves
         self.last_position = position
         self.last_piece = piece
+        self.list_available_moves = self.moves_after_removing_check(self.last_position,available_moves,self.current_player)
 
-
-    def is_king_in_check(self):
-        check = self.board.is_king_in_check(self.current_player)
-        if not check :
-            return  
         
-        new_available_list = self.list_available_moves
 
-        # new_available_list = []
-        for position in self.list_available_moves:
+
+
+
+    def moves_after_removing_check(self,from_pos,list_available_moves,color):
+
+        new_available_list = []
+
+        for position in list_available_moves:
             copied_board = self.board.copy()
-            # execute the movement
-            # see if the king still in check or not and if it's in check don't add it 
-            # else add the move 
+            copied_board.make_move(from_pos,position)
+            if not copied_board.is_king_in_check(color):
+                new_available_list.append(position)
 
-        self.list_available_moves = new_available_list
+        return new_available_list
         
 
 
     def can_the_king_move(self):
-        return True
+        for y,row in enumerate(self.board.board):
+            for x,piece in enumerate(row):
+                if piece and piece.color!=self.current_player:
+                    moves = piece.generate_moevs(self.board,(y,x))
+                    final_moves = self.moves_after_removing_check((y,x),moves,piece.color)
+                    if len(final_moves) > 0:
+                        return True
+        return False
 
     
     def game_over(self):
-        print("the game is finished")
+        current_player = self.current_player
+        print("the game is finished {current_player} won")
+        king_pos = self.board.get_king_position('black' if current_player =='white' else 'white' )
+        self.finished_pos = king_pos
 
     
     def moving_piece_code(self,piece,position):
@@ -69,8 +80,8 @@ class GameLogic:
         print("moving piece code",piece,position)
 
     def execute_movement(self,pos1,pos2):
-        self.board.set_piece(pos2,self.board.get_piece(pos1))
-        self.board.set_piece(pos1,None)
+        # replace with board.make_move
+        self.board.make_move(pos1,pos2)
         self.last_piece.has_moved_before = True
         self.clear_data()
         if self.can_the_king_move():

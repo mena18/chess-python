@@ -41,14 +41,6 @@ class Bond(Piece):
         data = []
         y,x = position
 
-        piece = board.get_piece((y-1*factor,x))
-        if(piece):
-            return []
-        data.append((y-1*factor,x))
-
-        if not self.has_moved_before and not board.get_piece((y-2*factor,x)):
-            data.append((y-2*factor,x))
-
         piece_one = board.get_piece((y-1*factor,x-1))
         if piece_one and piece_one.color!=self.color:
             data.append((y-1*factor,x-1))
@@ -56,6 +48,17 @@ class Bond(Piece):
         piece_two = board.get_piece((y-1*factor,x+1))
         if piece_two and piece_two.color!=self.color:
             data.append((y-1*factor,x+1))
+
+        
+        piece = board.get_piece((y-1*factor,x))
+        if(piece):
+            return data
+        data.append((y-1*factor,x))
+
+        if not self.has_moved_before and not board.get_piece((y-2*factor,x)):
+            data.append((y-2*factor,x))
+
+    
         return data
 
 

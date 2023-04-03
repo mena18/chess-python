@@ -34,8 +34,9 @@ class Handler:
     def draw_possible_position(position):
         pygame.draw.circle(Handler.screen, (20,85,30), (position[1]*Handler.SQUARE_SIZE+50,position[0]*Handler.SQUARE_SIZE+50),15)
         
-    def draw_square(position):
-        pygame.draw.rect(Handler.screen, (20,85,30), pygame.Rect(position[1]*Handler.SQUARE_SIZE,position[0]*Handler.SQUARE_SIZE+2,100,100))
+    def draw_square(position,COLOR=(20,85,30)):
+        pygame.draw.rect(Handler.screen, COLOR, pygame.Rect(position[1]*Handler.SQUARE_SIZE,position[0]*Handler.SQUARE_SIZE+2,100,100))
+    
 
 
 

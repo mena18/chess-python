@@ -1,6 +1,7 @@
 from Handler import Handler
 from Piece import Piece
 from PieceFactory import PieceFactory
+from copy import deepcopy
 class Board:
     
     def __init__(self):
@@ -37,13 +38,28 @@ class Board:
         y,x = position
         self.board[y][x] = piece
     
-    def is_king_in_check(color):
-        # find the king and return whether the king is in check or not
+    def is_king_in_check(self,color):
+        
+        king_y,king_x = self.get_king_position(color)
+        for y,row in enumerate(self.board):
+            for x,piece in enumerate(row):
+                if piece and piece.color!=color:
+                    moves = piece.generate_moevs(self,(y,x))
+                    if((king_y,king_x) in moves):
+                        return True
         return False
     
-    def get_king_position(color):
-        pass
+    def get_king_position(self,color):
+        for y,row in enumerate(self.board):
+            for x,piece in enumerate(row):
+                if piece and piece.get_type()=='k' and piece.color == color:
+                    return (y,x)
     
-    def copy():
-        return None
+    def make_move(self,from_pos,to_pos):
+        self.set_piece(to_pos,self.get_piece(from_pos))
+        self.set_piece(from_pos,None)
     
+    def copy(self):
+        new_board = Board()
+        new_board.board = deepcopy(self.board)
+        return new_board
