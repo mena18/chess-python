@@ -4,58 +4,29 @@ from copy import deepcopy
 
 
 class Board:
-    def __init__(self):
-        self.board = [
-            ["R", "N", "P", "Q", "K", "P", "N", "R"],
-            ["B", "B", "B", "B", "B", "B", "B", "B"],
-            [
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-            ],
-            [
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-            ],
-            [
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-            ],
-            [
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-            ],
-            ["b", "b", "b", "b", "b", "b", "b", "b"],
-            ["r", "n", "p", "q", "k", "p", "n", "r"],
-        ]
+    def __init__(self, board=None):
+        if board is None:
+            board = [
+                ["R", "N", "P", "Q", "K", "P", "N", "R"],
+                ["B", "B", "B", "B", "B", "B", "B", "B"],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["b", "b", "b", "b", "b", "b", "b", "b"],
+                ["r", "n", "p", "q", "k", "p", "n", "r"],
+            ]
 
-        for x, row in enumerate(self.board):
+        self.set_board(board)
+
+    def set_board(self, board):
+        self.board = deepcopy(board)
+        for x, row in enumerate(board):
             for y, piece_code in enumerate(row):
                 if piece_code:
                     self.board[x][y] = PieceFactory.create(piece_code)
+                else:
+                    self.board[x][y] = None
 
     def draw(self):
         for x, row in enumerate(self.board):
