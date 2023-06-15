@@ -19,6 +19,11 @@ class Board:
 
         self.set_board(board)
 
+    def get_pieces(self):
+        for y, row in enumerate(self.board):
+            for x, piece in enumerate(row):
+                yield (y, x, piece)
+
     def set_board(self, board):
         self.board = deepcopy(board)
         for x, row in enumerate(board):
@@ -46,12 +51,11 @@ class Board:
 
     def is_king_in_check(self, color):
         king_y, king_x = self.get_king_position(color)
-        for y, row in enumerate(self.board):
-            for x, piece in enumerate(row):
-                if piece and piece.color != color:
-                    moves = piece.generate_moevs(self, (y, x))
-                    if (king_y, king_x) in moves:
-                        return True
+        for y, x, piece in self.get_pieces():
+            if piece and piece.color != color:
+                moves = piece.generate_moevs(self, (y, x))
+                if (king_y, king_x) in moves:
+                    return True
         return False
 
     def get_king_position(self, color):
