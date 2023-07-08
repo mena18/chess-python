@@ -1,4 +1,6 @@
 env/
+.env
 *__pycache__/
 *.pyc
 .pytest_cache/
+/home/mina/Desktop/projects/chess-python/.env
