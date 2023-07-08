@@ -15,7 +15,7 @@ class GameLogic:
         self.last_position = None
         self.last_piece = None
 
-    def position_clicked(self, position):
+    def position_clicked(self, position=()):
         y, x = position
         piece = self.board.get_piece((y, x))
         if piece and piece.color == self.current_player:
@@ -25,7 +25,6 @@ class GameLogic:
         self.moving_piece_code(piece, position)
 
     def my_piece_code(self, piece, position):
-        print("my piece", piece, position)
         available_moves = piece.generate_moevs(self.board, position)
         self.last_position = position
         self.last_piece = piece
@@ -45,20 +44,18 @@ class GameLogic:
         return new_available_list
 
     def can_the_king_move(self):
-        for y, row in enumerate(self.board.board):
-            for x, piece in enumerate(row):
-                if piece and piece.color != self.current_player:
-                    moves = piece.generate_moevs(self.board, (y, x))
-                    final_moves = self.moves_after_removing_check(
-                        (y, x), moves, piece.color
-                    )
-                    if len(final_moves) > 0:
-                        return True
+        for y, x, piece in self.board.get_pieces():
+            if piece and piece.color != self.current_player:
+                moves = piece.generate_moevs(self.board, (y, x))
+                final_moves = self.moves_after_removing_check(
+                    (y, x), moves, piece.color
+                )
+                if len(final_moves) > 0:
+                    return True
         return False
 
     def game_over(self):
         current_player = self.current_player
-        print("the game is finished {current_player} won")
         king_pos = self.board.get_king_position(
             "black" if current_player == "white" else "white"
         )
@@ -70,7 +67,6 @@ class GameLogic:
             return
 
         self.execute_movement(self.last_position, position)
-        print("moving piece code", piece, position)
 
     def execute_movement(self, pos1, pos2):
         # replace with board.make_move

@@ -34,12 +34,11 @@ class Board:
                     self.board[x][y] = None
 
     def draw(self):
-        for x, row in enumerate(self.board):
-            for y, piece in enumerate(row):
-                if not piece:
-                    continue
-                piece_image = Handler.pieces_images.get(piece.code, 0)
-                Handler.draw_piece(piece_image, (y, x))
+        for y, x, piece in self.get_pieces():
+            if not piece:
+                continue
+            piece_image = Handler.pieces_images.get(piece.code, 0)
+            Handler.draw_piece(piece_image, (x, y))
 
     def get_piece(self, position):
         y, x = position
