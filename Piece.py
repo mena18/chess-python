@@ -8,7 +8,7 @@ class Piece:
 
     @property
     def color(self):
-        return "white" if self.code.islower() else "black"
+        return "black" if self.code.islower() else "white"
 
     def generate_moevs(self, board, position):
         if self.color == "white":
@@ -60,4 +60,4 @@ class Piece:
         return data
 
     def __str__(self):
-        return f"{self.code} - {self.color}"
+        return self.code

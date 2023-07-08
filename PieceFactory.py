@@ -4,9 +4,9 @@ from Pieces import King, Rock, Bond, Queen, Knight, Bishop
 class PieceFactory:
     list_of_pieces = {
         "r": Rock,
-        "b": Bond,
+        "p": Bond,
         "n": Knight,
-        "p": Bishop,
+        "b": Bishop,
         "k": King,
         "q": Queen,
     }

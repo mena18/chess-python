@@ -1,11 +1,17 @@
+from Engine import Engine
+from FenConvertor import FenConvertor
+from Board import Board
+
+
 class GameLogic:
     def __init__(self, board):
-        self.board = board
+        self.board: Board = board
         self.current_player = "white"
         self.list_available_moves = []
         self.last_position = None
         self.last_piece = None
         self.finished_pos = None
+        self.engine = Engine()
 
     def change_player(self):
         self.current_player = "black" if self.current_player == "white" else "white"
@@ -31,6 +37,27 @@ class GameLogic:
         self.list_available_moves = self.moves_after_removing_check(
             self.last_position, available_moves, self.current_player
         )
+
+    def suggest_best_move(self):
+        fen = self.board.get_fen(self.current_player[0])
+        print(fen)
+        self.engine.set_fen(fen)
+        move = self.engine.get_best_move()
+        print("Best Engine move is ", move)
+        return move
+
+    def make_computer_move(self):
+        fen = self.board.get_fen(self.current_player[0])
+        print(fen)
+        self.engine.set_fen(fen)
+        move = self.engine.get_best_move()
+        print("Engine best move is ", move)
+
+        mv1, mv2 = move[0:2], move[2:]
+        mv1 = FenConvertor.from_fen_to_pos(mv1)
+        mv2 = FenConvertor.from_fen_to_pos(mv2)
+        self.position_clicked(mv1)
+        self.position_clicked(mv2)
 
     def moves_after_removing_check(self, from_pos, list_available_moves, color):
         new_available_list = []

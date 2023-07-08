@@ -12,18 +12,18 @@ class Handler:
     screen = None
 
     pieces_images = {
-        "r": "white-rock",
-        "b": "white-bond",
-        "p": "white-pishop",
-        "q": "white-queen",
-        "k": "white-king",
-        "n": "white-knight",
-        "R": "black-rock",
-        "B": "black-bond",
-        "P": "black-pishop",
-        "Q": "black-queen",
-        "K": "black-king",
-        "N": "black-knight",
+        "R": "white-rock",
+        "B": "white-pishop",
+        "P": "white-bond",
+        "Q": "white-queen",
+        "K": "white-king",
+        "N": "white-knight",
+        "r": "black-rock",
+        "b": "black-pishop",
+        "p": "black-bond",
+        "q": "black-queen",
+        "k": "black-king",
+        "n": "black-knight",
     }
 
     def draw_piece(image, position):
@@ -52,4 +52,26 @@ class Handler:
                 100,
                 100,
             ),
+        )
+
+    def draw_arrows(pos1, pos2):
+        start_pos = (
+            pos1[1] * 100 + 50,
+            pos1[0] * 100 + 50,
+        )
+        end_pos = (
+            pos2[1] * 100 + 50,
+            pos2[0] * 100 + 50,
+        )
+
+        print(start_pos, end_pos)
+        pygame.draw.line(Handler.screen, (0, 0, 0), start_pos, end_pos, 8)
+        pygame.draw.circle(
+            Handler.screen,
+            (255, 0, 0),
+            (
+                pos2[1] * Handler.SQUARE_SIZE + 50,
+                pos2[0] * Handler.SQUARE_SIZE + 50,
+            ),
+            15,
         )

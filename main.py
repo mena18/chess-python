@@ -3,6 +3,7 @@ import os
 from GameLogic import GameLogic
 from Board import Board
 from Handler import Handler
+from FenConvertor import FenConvertor
 
 
 class Game:
@@ -33,7 +34,7 @@ class Game:
         self.background_rect = self.background.get_rect()
 
         self.board = Board()
-        self.game_logic = GameLogic(self.board)
+        self.game_logic: GameLogic = GameLogic(self.board)
 
     def draw(self):
         """
@@ -57,8 +58,18 @@ class Game:
         the logic for starting the game
         you wait for user inputs and call game_logic.position_clicked()
         """
+        self.draw()
+        best_move_saved = "e2e4"
         while True:
-            self.draw()
+            if self.game_logic.current_player == "black":
+                # delete arrow from previous suggestion
+
+                self.game_logic.make_computer_move()
+                self.draw()
+                best_move_saved = self.game_logic.suggest_best_move()
+
+            if self.game_logic.current_player == "white":
+                Handler.draw_arrows(*FenConvertor.full_fen_to_pos(best_move_saved))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -69,6 +80,7 @@ class Game:
                     x = x // Handler.SQUARE_SIZE
                     y = y // Handler.SQUARE_SIZE
                     self.game_logic.position_clicked((y, x))
+                    self.draw()
 
             pygame.display.flip()
 

@@ -7,14 +7,14 @@ def test_pond_cant_move_if_pened():
     # in that position the F pond shouldn't be able to move at all
     board.set_board(
         [
-            ["R", "N", "P", "Q", "K", "P", "N", "R"],
-            ["B", "B", "B", "B", "B", "B", "B", "B"],
+            ["r", "n", "b", "q", "k", "b", "n", "r"],
+            ["p", "p", "p", "p", "p", "p", "p", "p"],
             ["", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", "q"],
+            ["", "", "", "", "", "", "", "Q"],
             ["", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", ""],
-            ["b", "b", "b", "b", "b", "b", "b", "b"],
-            ["r", "n", "p", "", "k", "p", "n", "r"],
+            ["P", "P", "P", "P", "P", "P", "P", "P"],
+            ["R", "N", "B", "Q", "K", "B", "N", "R"],
         ]
     )
     game_logic = GameLogic(board)

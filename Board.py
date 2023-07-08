@@ -7,17 +7,42 @@ class Board:
     def __init__(self, board=None):
         if board is None:
             board = [
-                ["R", "N", "P", "Q", "K", "P", "N", "R"],
-                ["B", "B", "B", "B", "B", "B", "B", "B"],
+                ["r", "n", "b", "q", "k", "b", "n", "r"],
+                ["p", "p", "p", "p", "p", "p", "p", "p"],
                 ["", "", "", "", "", "", "", ""],
                 ["", "", "", "", "", "", "", ""],
                 ["", "", "", "", "", "", "", ""],
                 ["", "", "", "", "", "", "", ""],
-                ["b", "b", "b", "b", "b", "b", "b", "b"],
-                ["r", "n", "p", "q", "k", "p", "n", "r"],
+                ["P", "P", "P", "P", "P", "P", "P", "P"],
+                ["R", "N", "B", "Q", "K", "B", "N", "R"],
             ]
 
         self.set_board(board)
+
+    def get_fen(self, current_player="w"):
+        fen = ""
+        empty_count = 0
+
+        for row in self.board:
+            for square in row:
+                if square is None:
+                    empty_count += 1
+                else:
+                    if empty_count > 0:
+                        fen += str(empty_count)
+                        empty_count = 0
+                    fen += str(square)
+
+            if empty_count > 0:
+                fen += str(empty_count)
+                empty_count = 0
+
+            fen += "/"
+
+        fen = fen[:-1]  # Remove the trailing '/'
+        fen += f" {current_player} - - 0 1"  # Add the remaining FEN fields for turn, castling, etc.
+
+        return fen
 
     def get_pieces(self):
         for y, row in enumerate(self.board):
