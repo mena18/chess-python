@@ -4,3 +4,4 @@ env/
 *.pyc
 .pytest_cache/
 /home/mina/Desktop/projects/chess-python/.env
+python2.yml
