@@ -1,5 +1,5 @@
-from Handler import Handler
-from PieceFactory import PieceFactory
+from src.Handler import Handler
+from src.PieceFactory import PieceFactory
 from copy import deepcopy
 
 

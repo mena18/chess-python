@@ -1,5 +1,5 @@
-from Board import Board
-from GameLogic import GameLogic
+from src.Board import Board
+from src.GameLogic import GameLogic
 
 
 def test_pond_cant_move_if_pened():

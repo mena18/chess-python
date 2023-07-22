@@ -1,4 +1,4 @@
-from FenConvertor import FenConvertor
+from src.FenConvertor import FenConvertor
 
 
 def test_fen_converstions():

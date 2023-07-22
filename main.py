@@ -1,9 +1,9 @@
 import pygame
 import os
-from GameLogic import GameLogic
-from Board import Board
-from Handler import Handler
-from FenConvertor import FenConvertor
+from src.GameLogic import GameLogic
+from src.Board import Board
+from src.Handler import Handler
+from src.FenConvertor import FenConvertor
 
 
 class Game:

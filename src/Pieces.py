@@ -1,4 +1,4 @@
-from Piece import Piece
+from src.Piece import Piece
 
 
 class Rock(Piece):

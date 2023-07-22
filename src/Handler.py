@@ -3,7 +3,7 @@ import pygame
 
 
 class Handler:
-    GAME_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    GAME_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
     IMAGES_FOLDER = os.path.join(GAME_FOLDER, "images")
     WIDTH = 800
     HEIGHT = 800

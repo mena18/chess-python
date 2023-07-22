@@ -1,6 +1,6 @@
-from Engine import Engine
-from FenConvertor import FenConvertor
-from Board import Board
+from src.Engine import Engine
+from src.FenConvertor import FenConvertor
+from src.Board import Board
 
 
 class GameLogic:

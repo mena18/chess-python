@@ -1,4 +1,4 @@
-from Board import Board
+from src.Board import Board
 
 
 def test_king_in_check():
