@@ -18,6 +18,11 @@ class Piece:
             return [(position[0] - 1, position[1]), (position[0] - 2, position[1])]
         return [(position[0] + 1, position[1]), (position[0] + 2, position[1])]
 
+    def __str__(self):
+        return self.code
+
+
+class ChessMoves:
     def generate_direct_moves(self, board, position):
         data = []
         y, x = position
@@ -61,6 +66,3 @@ class Piece:
                 new_y += directions_y[direction]
 
         return data
-
-    def __str__(self):
-        return self.code

@@ -12,4 +12,9 @@ class PieceFactory:
     }
 
     def create(code):
-        return PieceFactory.list_of_pieces[code.lower()](code)
+        # R means white rock white r means black rock so get lower of code to get the piece type
+        piece_code = code.lower()
+        # getting piece class
+        PieceClass = PieceFactory.list_of_pieces[piece_code]
+        # return the piece itself
+        return PieceClass(code)

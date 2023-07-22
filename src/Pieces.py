@@ -1,18 +1,18 @@
-from src.Piece import Piece
+from src.Piece import Piece, ChessMoves
 from src.settings import Color
 
 
-class Rock(Piece):
+class Rock(Piece, ChessMoves):
     def generate_moevs(self, board, position):
         return self.generate_direct_moves(board, position)
 
 
-class Bishop(Piece):
+class Bishop(Piece, ChessMoves):
     def generate_moevs(self, board, position):
         return self.generate_diagonal_moves(board, position)
 
 
-class Queen(Piece):
+class Queen(Piece, ChessMoves):
     def generate_moevs(self, board, position):
         return self.generate_diagonal_moves(
             board, position
