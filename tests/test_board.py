@@ -1,4 +1,5 @@
 from src.Board import Board
+from src.settings import Color
 
 
 def test_king_in_check():
@@ -15,7 +16,7 @@ def test_king_in_check():
             ["R", "N", "B", "Q", "K", "B", "N", "R"],
         ]
     )
-    assert board.is_king_in_check(color="black") is True
+    assert board.is_king_in_check(color=Color.BLACK) is True
     board.set_board(
         [
             ["r", "n", "b", "q", "k", "b", "n", "r"],
@@ -28,7 +29,7 @@ def test_king_in_check():
             ["R", "N", "B", "Q", "K", "B", "N", "R"],
         ]
     )
-    assert board.is_king_in_check(color="black") is True
+    assert board.is_king_in_check(color=Color.BLACK) is True
     board.set_board(
         [
             ["r", "n", "b", "q", "k", "b", "n", "r"],
@@ -41,7 +42,7 @@ def test_king_in_check():
             ["R", "N", "B", "Q", "K", "B", "N", "R"],
         ]
     )
-    assert board.is_king_in_check(color="black") is False
+    assert board.is_king_in_check(color=Color.BLACK) is False
 
 
 def test_draw_all_pieces():

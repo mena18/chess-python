@@ -1,4 +1,5 @@
 from src.Piece import Piece
+from src.settings import Color
 
 
 class Rock(Piece):
@@ -41,7 +42,7 @@ class King(Piece):
 class Bond(Piece):
     def generate_moevs(self, board, position):
         factor = 1
-        if self.color == "black":
+        if self.color == Color.BLACK:
             factor = -1
 
         data = []

@@ -1,12 +1,13 @@
 from src.Engine import Engine
 from src.FenConvertor import FenConvertor
 from src.Board import Board
+from src.settings import Color
 
 
 class GameLogic:
     def __init__(self, board):
         self.board: Board = board
-        self.current_player = "white"
+        self.current_player = Color.WHITE
         self.list_available_moves = []
         self.last_position = None
         self.last_piece = None
@@ -14,7 +15,9 @@ class GameLogic:
         self.engine = Engine()
 
     def change_player(self):
-        self.current_player = "black" if self.current_player == "white" else "white"
+        self.current_player = (
+            Color.BLACK if self.current_player == Color.WHITE else Color.WHITE
+        )
 
     def clear_data(self):
         self.list_available_moves = []
@@ -39,7 +42,8 @@ class GameLogic:
         )
 
     def suggest_best_move(self):
-        fen = self.board.get_fen(self.current_player[0])
+        fen = self.board.get_fen(self.current_player)
+
         print(fen)
         self.engine.set_fen(fen)
         move = self.engine.get_best_move()
@@ -47,7 +51,7 @@ class GameLogic:
         return move
 
     def make_computer_move(self):
-        fen = self.board.get_fen(self.current_player[0])
+        fen = self.board.get_fen(self.current_player)
         print(fen)
         self.engine.set_fen(fen)
         move = self.engine.get_best_move()
@@ -84,7 +88,7 @@ class GameLogic:
     def game_over(self):
         current_player = self.current_player
         king_pos = self.board.get_king_position(
-            "black" if current_player == "white" else "white"
+            Color.BLACK if current_player == Color.WHITE else Color.WHITE
         )
         self.finished_pos = king_pos
 

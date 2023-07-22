@@ -4,6 +4,7 @@ from src.GameLogic import GameLogic
 from src.Board import Board
 from src.Handler import Handler
 from src.FenConvertor import FenConvertor
+from src.settings import Color
 
 
 class Game:
@@ -61,14 +62,14 @@ class Game:
         self.draw()
         best_move_saved = "e2e4"
         while True:
-            if self.game_logic.current_player == "black":
+            if self.game_logic.current_player == Color.BLACK:
                 # delete arrow from previous suggestion
 
                 self.game_logic.make_computer_move()
                 self.draw()
                 best_move_saved = self.game_logic.suggest_best_move()
 
-            if self.game_logic.current_player == "white":
+            if self.game_logic.current_player == Color.WHITE:
                 Handler.draw_arrows(*FenConvertor.full_fen_to_pos(best_move_saved))
 
             for event in pygame.event.get():

@@ -1,3 +1,6 @@
+from src.settings import Color
+
+
 class Piece:
     def __init__(self, piece_code):
         self.code = piece_code
@@ -8,10 +11,10 @@ class Piece:
 
     @property
     def color(self):
-        return "black" if self.code.islower() else "white"
+        return Color.BLACK if self.code.islower() else Color.WHITE
 
     def generate_moevs(self, board, position):
-        if self.color == "white":
+        if self.color == Color.WHITE:
             return [(position[0] - 1, position[1]), (position[0] - 2, position[1])]
         return [(position[0] + 1, position[1]), (position[0] + 2, position[1])]
 

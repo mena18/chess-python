@@ -1,5 +1,6 @@
 from src.Board import Board
 from src.GameLogic import GameLogic
+from src.settings import Color
 
 
 def test_pond_cant_move_if_pened():
@@ -18,7 +19,7 @@ def test_pond_cant_move_if_pened():
         ]
     )
     game_logic = GameLogic(board)
-    game_logic.current_player = "black"
+    game_logic.current_player = Color.BLACK
     game_logic.position_clicked((1, 5))  # clicking on f7
     assert len(game_logic.list_available_moves) == 0
     game_logic.position_clicked((0, 1))  # clicking on b8

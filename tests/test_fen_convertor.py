@@ -9,7 +9,7 @@ def test_fen_converstions():
     assert FenConvertor.from_fen_to_pos("c8") == (0, 2)
 
 
-def pos_conversions():
+def test_pos_conversions():
     assert FenConvertor.from_pos_to_fen((4, 4)) == "e4"
     assert FenConvertor.from_pos_to_fen((6, 4)) == "e2"
     assert FenConvertor.from_pos_to_fen((7, 3)) == "d1"
