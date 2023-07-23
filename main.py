@@ -50,7 +50,7 @@ class Game:
             Handler.draw_square(self.game_logic.last_position)
         if self.game_logic.finished_pos:
             Handler.draw_square(self.game_logic.finished_pos, COLOR=(255, 0, 0))
-        self.board.draw()
+        Handler.draw_board(self.board)
         for move in self.game_logic.list_available_moves:
             Handler.draw_possible_position(move)
 

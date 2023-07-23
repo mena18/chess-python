@@ -54,6 +54,13 @@ class Handler:
             ),
         )
 
+    def draw_board(board):
+        for y, x, piece in board.get_pieces():
+            if not piece:
+                continue
+            piece_image = Handler.pieces_images.get(piece.code, 0)
+            Handler.draw_piece(piece_image, (x, y))
+
     def draw_arrows(pos1, pos2):
         start_pos = (
             pos1[1] * 100 + 50,

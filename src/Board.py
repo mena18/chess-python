@@ -1,25 +1,16 @@
 from src.Handler import Handler
 from src.PieceFactory import PieceFactory
 from copy import deepcopy
-from src.settings import Color
+from src.settings import Color, Pieces, INITIAL_BOARD
 
 
 class Board:
-    def __init__(self, board=None):
-        if board is None:
-            board = [
-                ["r", "n", "b", "q", "k", "b", "n", "r"],
-                ["p", "p", "p", "p", "p", "p", "p", "p"],
-                ["", "", "", "", "", "", "", ""],
-                ["", "", "", "", "", "", "", ""],
-                ["", "", "", "", "", "", "", ""],
-                ["", "", "", "", "", "", "", ""],
-                ["P", "P", "P", "P", "P", "P", "P", "P"],
-                ["R", "N", "B", "Q", "K", "B", "N", "R"],
-            ]
-
+    def __init__(self, board=INITIAL_BOARD):
         self.set_board(board)
 
+    # convert board to fen : Note that the fen has other states like is castle happen and
+    # is there enpassawant and many other things so it should be handled in other place
+    # and get fen should only convert the board to fen without carring about other variables
     def get_fen(self, current_player=Color.WHITE):
         fen = ""
         empty_count = 0
@@ -46,11 +37,14 @@ class Board:
 
         return fen
 
+    # loop over all the pieces
     def get_pieces(self):
         for y, row in enumerate(self.board):
             for x, piece in enumerate(row):
                 yield (y, x, piece)
 
+    # create board from array of pieces
+    # TODO i should create another one to create board from fen
     def set_board(self, board):
         self.board = deepcopy(board)
         for x, row in enumerate(board):
@@ -59,13 +53,6 @@ class Board:
                     self.board[x][y] = PieceFactory.create(piece_code)
                 else:
                     self.board[x][y] = None
-
-    def draw(self):
-        for y, x, piece in self.get_pieces():
-            if not piece:
-                continue
-            piece_image = Handler.pieces_images.get(piece.code, 0)
-            Handler.draw_piece(piece_image, (x, y))
 
     def get_piece(self, position):
         y, x = position
@@ -85,10 +72,9 @@ class Board:
         return False
 
     def get_king_position(self, color):
-        for y, row in enumerate(self.board):
-            for x, piece in enumerate(row):
-                if piece and piece.get_type() == "k" and piece.color == color:
-                    return (y, x)
+        for y, x, piece in self.get_pieces():
+            if piece and piece.get_type() == Pieces.KING.value and piece.color == color:
+                return (y, x)
 
     def make_move(self, from_pos, to_pos):
         self.set_piece(to_pos, self.get_piece(from_pos))
