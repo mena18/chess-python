@@ -25,6 +25,7 @@ class FenConvertor:
 
         return (y, x)
 
+    @staticmethod
     def full_fen_to_pos(fen):
         fen1, fen2 = fen[0:2], fen[2:]
         pos1 = FenConvertor.from_fen_to_pos(fen1)

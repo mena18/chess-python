@@ -23,7 +23,7 @@ class Board:
     def get_fen(self, current_player=Color.WHITE):
         fen = ""
         empty_count = 0
-        current_player_color = "b" if current_player == Color.BLACK else "w"
+        current_player_color_letter = "b" if current_player == Color.BLACK else "w"
 
         for row in self.board:
             for square in row:
@@ -42,7 +42,7 @@ class Board:
             fen += "/"
 
         fen = fen[:-1]  # Remove the trailing '/'
-        fen += f" {current_player_color} - - 0 1"  # Add the remaining FEN fields for turn, castling, etc.
+        fen += f" {current_player_color_letter} - - 0 1"  # Add the remaining FEN fields for turn, castling, etc.
 
         return fen
 
