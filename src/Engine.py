@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from stockfish import Stockfish
 
+
 load_dotenv()
 
 
@@ -17,7 +18,7 @@ class Engine:
         )
 
         self.engine.set_fen_position(
-            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1"
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
         )
 
     def set_fen(self, fen):

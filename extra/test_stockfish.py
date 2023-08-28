@@ -1,10 +1,10 @@
 import os
 from dotenv import load_dotenv
+from stockfish import Stockfish
 
 load_dotenv()
 STOCKFISH_PATH = os.getenv("STOCKFISH_PATH")
 
-from stockfish import Stockfish
 
 stockfish = Stockfish(
     path=STOCKFISH_PATH,

@@ -1,5 +1,5 @@
 from src.Piece import Piece, ChessMoves
-from src.settings import Color
+from src.settings import Color, GameFlags
 
 
 class Rock(Piece, ChessMoves):
@@ -35,6 +35,46 @@ class King(Piece):
                 data.append(new_pos)
                 if piece and piece.color == self.color:
                     data.pop()
+
+        print(
+            GameFlags.current_player,
+        )
+
+        if (
+            GameFlags.white_king_can_castle_right
+            and board.get_piece((7, 5)) is None
+            and board.get_piece((7, 6)) is None
+        ):
+            data.append((7, 6))
+            GameFlags.rock_position_before_castle = (7, 7)
+            GameFlags.rock_position_after_castle = (7, 5)
+
+        if (
+            GameFlags.white_king_can_castle_left
+            and board.get_piece((7, 3)) is None
+            and board.get_piece((7, 2)) is None
+        ):
+            data.append((7, 2))
+            GameFlags.rock_position_before_castle = (7, 0)
+            GameFlags.rock_position_after_castle = (7, 3)
+
+        if (
+            GameFlags.black_king_can_castle_left
+            and board.get_piece((0, 3)) is None
+            and board.get_piece((0, 2)) is None
+        ):
+            data.append((0, 2))
+            GameFlags.rock_position_before_castle = (0, 0)
+            GameFlags.rock_position_after_castle = (0, 3)
+
+        if (
+            GameFlags.black_king_can_castle_right
+            and board.get_piece((0, 5)) is None
+            and board.get_piece((0, 6)) is None
+        ):
+            data.append((0, 6))
+            GameFlags.rock_position_before_castle = (0, 7)
+            GameFlags.rock_position_after_castle = (0, 5)
 
         return data
 

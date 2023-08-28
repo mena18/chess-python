@@ -1,7 +1,6 @@
-from src.Handler import Handler
 from src.PieceFactory import PieceFactory
 from copy import deepcopy
-from src.settings import Color, Pieces, INITIAL_BOARD
+from src.settings import Color, Pieces, INITIAL_BOARD, GameFlags
 
 
 class Board:
@@ -15,6 +14,17 @@ class Board:
         fen = ""
         empty_count = 0
         current_player_color_letter = "b" if current_player == Color.BLACK else "w"
+        castleConditions = ""
+        if GameFlags.white_king_can_castle_right:
+            castleConditions += "K"
+        if GameFlags.white_king_can_castle_left:
+            castleConditions += "Q"
+        if GameFlags.black_king_can_castle_right:
+            castleConditions += "k"
+        if GameFlags.black_king_can_castle_left:
+            castleConditions += "q"
+        if len(castleConditions) == 0:
+            castleConditions = "-"
 
         for row in self.board:
             for square in row:
@@ -33,7 +43,7 @@ class Board:
             fen += "/"
 
         fen = fen[:-1]  # Remove the trailing '/'
-        fen += f" {current_player_color_letter} - - 0 1"  # Add the remaining FEN fields for turn, castling, etc.
+        fen += f" {current_player_color_letter} {castleConditions} - 0 1"  # Add the remaining FEN fields for turn, castling, etc.
 
         return fen
 
