@@ -36,10 +36,6 @@ class King(Piece):
                 if piece and piece.color == self.color:
                     data.pop()
 
-        print(
-            GameFlags.current_player,
-        )
-
         if (
             GameFlags.white_king_can_castle_right
             and board.get_piece((7, 5)) is None
