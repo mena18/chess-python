@@ -1,4 +1,4 @@
-from src.settings import Color
+from settings import Color
 
 
 class Piece:

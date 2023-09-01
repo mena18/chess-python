@@ -1,6 +1,6 @@
-from src.PieceFactory import PieceFactory
+from Models.PieceFactory import PieceFactory
 from copy import deepcopy
-from src.settings import Color, Pieces, INITIAL_BOARD, GameFlags
+from settings import Color, Pieces, INITIAL_BOARD, GameFlags
 
 
 class Board:

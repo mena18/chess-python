@@ -1,4 +1,4 @@
-from src.Pieces import King, Rock, Bond, Queen, Knight, Bishop
+from Models.Pieces import King, Rock, Bond, Queen, Knight, Bishop
 
 
 class PieceFactory:

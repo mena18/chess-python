@@ -1,5 +1,5 @@
-from src.Piece import Piece, ChessMoves
-from src.settings import Color, GameFlags
+from Models.Piece import Piece, ChessMoves
+from settings import Color, GameFlags
 
 
 class Rock(Piece, ChessMoves):
@@ -37,7 +37,8 @@ class King(Piece):
                     data.pop()
 
         if (
-            GameFlags.white_king_can_castle_right
+            GameFlags.current_player == Color.WHITE
+            and GameFlags.white_king_can_castle_right
             and board.get_piece((7, 5)) is None
             and board.get_piece((7, 6)) is None
         ):
@@ -46,7 +47,8 @@ class King(Piece):
             GameFlags.rock_position_after_castle = (7, 5)
 
         if (
-            GameFlags.white_king_can_castle_left
+            GameFlags.current_player == Color.WHITE
+            and GameFlags.white_king_can_castle_left
             and board.get_piece((7, 3)) is None
             and board.get_piece((7, 2)) is None
         ):
@@ -55,7 +57,8 @@ class King(Piece):
             GameFlags.rock_position_after_castle = (7, 3)
 
         if (
-            GameFlags.black_king_can_castle_left
+            GameFlags.current_player == Color.BLACK
+            and GameFlags.black_king_can_castle_left
             and board.get_piece((0, 3)) is None
             and board.get_piece((0, 2)) is None
         ):
@@ -64,7 +67,8 @@ class King(Piece):
             GameFlags.rock_position_after_castle = (0, 3)
 
         if (
-            GameFlags.black_king_can_castle_right
+            GameFlags.current_player == Color.BLACK
+            and GameFlags.black_king_can_castle_right
             and board.get_piece((0, 5)) is None
             and board.get_piece((0, 6)) is None
         ):

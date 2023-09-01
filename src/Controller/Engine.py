@@ -22,7 +22,14 @@ class Engine:
         )
 
     def set_fen(self, fen):
-        self.engine.set_fen_position(fen)
+        if self.engine.is_fen_valid(fen):
+            print("fen is valid", fen)
+            self.engine.set_fen_position(fen)
+        else:
+            print("fen isn't valid", fen)
+
+    def make_move(self, move):
+        self.engine.make_moves_from_current_position(move)
 
     def next_move(self, move):
         return self.engine.make_moves_from_current_position([""])

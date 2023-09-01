@@ -1,6 +1,6 @@
 import os
 import pygame
-from src.settings import GameFlags
+from settings import GameFlags
 
 
 class PygameGUI:
@@ -11,7 +11,7 @@ class PygameGUI:
         self.HEIGHT = 800
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self.GAME_FOLDER = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), ".."
+            os.path.dirname(os.path.abspath(__file__)), "..", ".."
         )
         self.IMAGES_FOLDER = os.path.join(self.GAME_FOLDER, "images")
 
@@ -33,6 +33,8 @@ class PygameGUI:
             "n": "black-knight",
         }
         self.initial_setup()
+        self.keys = pygame.key.get_pressed()
+        self.best_move_saved = "e2e4"
 
         # when users click on his piece the position of the piece is stored here
         # it only stored if it's your piece other wise this is set to null
@@ -40,6 +42,7 @@ class PygameGUI:
         self.last_clicked_piece = None
         # this contains the list of positions that the current piece can move
         self.list_of_available_moves = []
+        self.view_best_move = False
 
     def clear(self):
         self.last_clicked_position = None
@@ -47,8 +50,6 @@ class PygameGUI:
         self.list_of_available_moves = []
 
     def render(self):
-        context_obj = self.controller.get_render_context_object()
-
         # reset the background
         self.screen.blit(self.background, self.background_rect)
 
@@ -57,8 +58,8 @@ class PygameGUI:
             self.draw_square(self.last_clicked_position)
 
         # draw the king square in red if the king in check
-        if context_obj["finished_pos"]:
-            self.draw_square(context_obj["finished_pos"], COLOR=(255, 0, 0))
+        if GameFlags.finished_pos:
+            self.draw_square(GameFlags.finished_pos, COLOR=(255, 0, 0))
 
         # draw the board
         self.draw_board(self.controller.board)
@@ -90,6 +91,10 @@ class PygameGUI:
                 self.user_action_quit()
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.user_action_clicked(event)
+            elif event.type == pygame.KEYDOWN:
+                self.keys = pygame.key.get_pressed()
+            elif event.type == pygame.KEYUP:
+                self.user_action_keyPressed()
 
     def user_action_quit(self):
         pygame.quit()
@@ -111,8 +116,6 @@ class PygameGUI:
             )
             self.last_clicked_position = position
             # TODO remove later
-            GameFlags.last_piece = piece
-            GameFlags.last_position = position
             self.render()
             return
 
@@ -125,6 +128,11 @@ class PygameGUI:
 
         self.clear()
         self.render()
+
+    def user_action_keyPressed(self):
+        if self.keys[pygame.K_h]:
+            self.view_best_move = not self.view_best_move
+            self.render()
 
     def draw_piece(self, image, position):
         self.screen.blit(

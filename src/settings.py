@@ -73,7 +73,7 @@ class GameFlags:
     white_king_can_castle_left = 1
     black_king_can_castle_right = 1
     black_king_can_castle_left = 1
-    en_passant = 0
+    en_passant = ""
     number_of_total_moves = 0
     number_of_moves_till_50 = 0
     current_player = Color.WHITE
@@ -83,3 +83,4 @@ class GameFlags:
     rock_position_before_castle = None
     rock_position_after_castle = None
     castle_flag = "-"
+    game_over = False
