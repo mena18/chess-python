@@ -1,14 +1,14 @@
 from src.Engine import Engine
 from src.settings import FenConvertor, Color, GameFlags
 from src.Board import Board
+from src.Piece import Piece
 
 
 class GameLogic:
     def __init__(self, board):
         self.board: Board = board
-        self.flags = GameFlags
         self.engine = Engine()
-        self.current_player = self.flags.current_player
+        self.current_player = GameFlags.current_player
         self.list_available_moves = []
 
     def change_player(self):
@@ -18,8 +18,32 @@ class GameLogic:
 
     def clear_data(self):
         self.list_available_moves = []
-        self.flags.last_position = None
-        self.flags.last_piece = None
+        GameFlags.last_position = None
+        GameFlags.last_piece = None
+
+    def move_flow(self, pos_from, pos_to):
+        # check if it's a valid move by getting all available moves for pos from piece and check that pos to exsits in them
+        piece = self.board.get_piece(pos_from)
+        list_of_available_moves = piece.generate_moevs(self.board, pos_from)
+        list_of_available_moves = self.moves_after_removing_check(
+            pos_from, list_of_available_moves, self.current_player
+        )
+        if pos_to not in list_of_available_moves:
+            return
+
+        self.execute_movement(pos_from, pos_to)
+
+        if self.can_the_king_move():
+            self.change_player()
+        else:
+            self.game_over()
+            return
+
+        # execute the movement
+        # look for the other king and check if that king is in check and can't escape or what is his status
+        # if every thing ok switch players
+        #
+        pass
 
     def position_clicked(self, position=()):
         y, x = position
@@ -32,10 +56,10 @@ class GameLogic:
 
     def my_piece_code(self, piece, position):
         available_moves = piece.generate_moevs(self.board, position)
-        self.flags.last_position = position
-        self.flags.last_piece = piece
+        GameFlags.last_position = position
+        GameFlags.last_piece = piece
         self.list_available_moves = self.moves_after_removing_check(
-            self.flags.last_position, available_moves, self.current_player
+            GameFlags.last_position, available_moves, self.current_player
         )
         print("available moves", self.list_available_moves)
 
@@ -54,9 +78,10 @@ class GameLogic:
         mv1, mv2 = move[0:2], move[2:]
         mv1 = FenConvertor.from_fen_to_pos(mv1)
         mv2 = FenConvertor.from_fen_to_pos(mv2)
-        self.flags.last_position = mv1
-        self.flags.last_piece = self.board.get_piece(mv1)
+        GameFlags.last_position = mv1
+        GameFlags.last_piece = self.board.get_piece(mv1)
         self.execute_movement(mv1, mv2)
+        self.after_movement_execution(self.board.get_piece(mv2))
 
     def moves_after_removing_check(self, from_pos, list_available_moves, color):
         new_available_list = []
@@ -92,7 +117,7 @@ class GameLogic:
             self.clear_data()
             return
 
-        self.execute_movement(self.flags.last_position, position)
+        self.execute_movement(GameFlags.last_position, position)
 
     def execute_movement(self, pos1, pos2):
         # check if it's en-passant
@@ -107,22 +132,27 @@ class GameLogic:
             self.board.set_piece(rock_pos, None)
             self.board.set_piece(pos2, king)
             self.board.set_piece(GameFlags.rock_position_after_castle, rock)
-            if self.flags.current_player == Color.WHITE:
-                self.flags.white_king_can_castle_left = 0
-                self.flags.white_king_can_castle_right = 0
+            if GameFlags.current_player == Color.WHITE:
+                GameFlags.white_king_can_castle_left = 0
+                GameFlags.white_king_can_castle_right = 0
             else:
-                self.flags.black_king_can_castle_left = 0
-                self.flags.black_king_can_castle_right = 0
+                GameFlags.black_king_can_castle_left = 0
+                GameFlags.black_king_can_castle_right = 0
         else:
             self.board.make_move(pos1, pos2)
 
         # replace with board.make_move
-        self.flags.last_piece.has_moved_before = True
+        GameFlags.last_piece.has_moved_before = True
         self.clear_data()
+
+    def after_movement_execution(self, piece: Piece):
+        piece.has_moved_before = True
+
         if self.can_the_king_move():
             self.change_player()
         else:
             self.game_over()
+            return
 
 
 class Controller:
@@ -143,6 +173,31 @@ class Controller:
         return {
             "list_available_moves": self.game_logic.list_available_moves,
             "board": self.game_logic.board,
-            "last_position": self.game_logic.flags.last_position,
-            "finished_pos": self.game_logic.flags.finished_pos,
+            "last_position": GameFlags.last_position,
+            "finished_pos": GameFlags.finished_pos,
         }
+
+    def get_piece_from_pos(self, position):
+        return self.board.get_piece(position)
+
+    def get_current_player(self):
+        print("current player is ", self.game_logic.current_player)
+        return self.game_logic.current_player
+
+    def get_list_of_available_moves(self, position):
+        piece: Piece = self.board.get_piece(position)
+        available_moves = piece.generate_moevs(self.board, position)
+        available_moves = self.game_logic.moves_after_removing_check(
+            position, available_moves, self.get_current_player()
+        )
+        return available_moves
+
+    def is_valid(self, pos_from, pos_to):
+        list_of_moves = self.get_list_of_available_moves(pos_from)
+        return pos_to in list_of_moves
+
+    def execute_move(self, pos_from, pos_to):
+        piece: Piece = self.board.get_piece(pos_from)
+
+        self.game_logic.execute_movement(pos_from, pos_to)
+        self.game_logic.after_movement_execution(piece)

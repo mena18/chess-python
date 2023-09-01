@@ -1,5 +1,6 @@
 import os
 import pygame
+from src.settings import GameFlags
 
 
 class PygameGUI:
@@ -31,15 +32,19 @@ class PygameGUI:
             "k": "black-king",
             "n": "black-knight",
         }
-        self.load_images()
+        self.initial_setup()
 
-        pygame.display.set_caption(self.GAME_CAPTION)
+        # when users click on his piece the position of the piece is stored here
+        # it only stored if it's your piece other wise this is set to null
+        self.last_clicked_position = None
+        self.last_clicked_piece = None
+        # this contains the list of positions that the current piece can move
+        self.list_of_available_moves = []
 
-        self.background = pygame.transform.smoothscale(
-            pygame.image.load(os.path.join(self.IMAGES_FOLDER, "board.png")).convert(),
-            (self.WIDTH, self.HEIGHT),
-        )
-        self.background_rect = self.background.get_rect()
+    def clear(self):
+        self.last_clicked_position = None
+        self.last_clicked_piece = None
+        self.list_of_available_moves = []
 
     def render(self):
         context_obj = self.controller.get_render_context_object()
@@ -48,42 +53,78 @@ class PygameGUI:
         self.screen.blit(self.background, self.background_rect)
 
         # draw the previous square you clicked
-        if context_obj["last_position"]:
-            self.draw_square(context_obj["last_position"])
+        if self.last_clicked_position:
+            self.draw_square(self.last_clicked_position)
 
         # draw the king square in red if the king in check
         if context_obj["finished_pos"]:
             self.draw_square(context_obj["finished_pos"], COLOR=(255, 0, 0))
 
         # draw the board
-        self.draw_board(context_obj["board"])
+        self.draw_board(self.controller.board)
 
         # draw all available moves
-        for move in context_obj["list_available_moves"]:
+        for move in self.list_of_available_moves:
             self.draw_possible_position(move)
 
         pygame.display.flip()
 
-    def load_images(self):
+    def initial_setup(self):
         for piece_code in self.pieces_images:
             self.pieces_images[piece_code] = pygame.image.load(
                 os.path.join(
                     self.IMAGES_FOLDER, f"{self.pieces_images[piece_code]}.svg"
                 )
             )
+        pygame.display.set_caption(self.GAME_CAPTION)
+
+        self.background = pygame.transform.smoothscale(
+            pygame.image.load(os.path.join(self.IMAGES_FOLDER, "board.png")).convert(),
+            (self.WIDTH, self.HEIGHT),
+        )
+        self.background_rect = self.background.get_rect()
 
     def listen_for_move(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
+                self.user_action_quit()
             elif event.type == pygame.MOUSEBUTTONUP:
-                x, y = event.pos
-                x = x // self.SQUARE_SIZE
-                y = y // self.SQUARE_SIZE
-                print(y, x)
-                self.controller.position_clicked((y, x))
-                self.render()
+                self.user_action_clicked(event)
+
+    def user_action_quit(self):
+        pygame.quit()
+        exit()
+
+    def user_action_clicked(self, event):
+        x, y = event.pos
+        x = x // self.SQUARE_SIZE
+        y = y // self.SQUARE_SIZE
+        print(y, x)
+
+        position = (y, x)
+        piece = self.controller.get_piece_from_pos(position)
+
+        if piece and piece.color == self.controller.get_current_player():
+            # add get_list_of_available_moves to controller
+            self.list_of_available_moves = self.controller.get_list_of_available_moves(
+                position
+            )
+            self.last_clicked_position = position
+            # TODO remove later
+            GameFlags.last_piece = piece
+            GameFlags.last_position = position
+            self.render()
+            return
+
+        pos_from = self.last_clicked_position
+        pos_to = position
+        # add validate to controller
+
+        if pos_from and self.controller.is_valid(pos_from, pos_to):
+            self.controller.execute_move(pos_from, pos_to)
+
+        self.clear()
+        self.render()
 
     def draw_piece(self, image, position):
         self.screen.blit(
