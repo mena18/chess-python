@@ -28,14 +28,13 @@ class Game:
 
         self.render()
 
-        while True:
+        while not GameFlags.game_over:
             if self.controller.get_current_player() == Color.BLACK:
                 # delete arrow from previous suggestion
 
                 self.controller.make_computer_move()
                 self.render()
-                if not GameFlags.game_over:
-                    self.gui.best_move_saved = self.game_logic.suggest_best_move()
+                self.gui.best_move_saved = self.game_logic.suggest_best_move()
 
             if GameFlags.current_player == Color.WHITE and self.gui.view_best_move:
                 self.gui.draw_arrows(
@@ -44,6 +43,16 @@ class Game:
                 pygame.display.flip()
 
             self.gui.listen_for_move()
+
+        import time
+
+        while True:
+            self.render()
+            time.sleep(0.2)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
 
 
 game = Game()

@@ -23,9 +23,12 @@ class GameLogic:
     def suggest_best_move(self):
         fen = self.board.get_fen(GameFlags.current_player)
         print("suggest", end="  ")
-        self.engine.set_fen(fen)
-        move = self.engine.get_best_move()
-        return move
+        try:
+            self.engine.set_fen(fen)
+            move = self.engine.get_best_move()
+            return move
+        except:
+            return None
 
     def make_computer_move(self):
         fen = self.board.get_fen(GameFlags.current_player)
@@ -54,7 +57,7 @@ class GameLogic:
 
     def can_the_king_move(self):
         for y, x, piece in self.board.get_pieces():
-            if piece and piece.color != GameFlags.current_player.value:
+            if piece and piece.color != GameFlags.current_player:
                 moves = piece.generate_moevs(self.board, (y, x))
                 final_moves = self.moves_after_removing_check(
                     (y, x), moves, piece.color
@@ -121,7 +124,7 @@ class GameLogic:
 
     def after_movement_execution(self, piece: Piece):
         piece.has_moved_before = True
-
+        print("can the king move", self.can_the_king_move())
         if self.can_the_king_move():
             self.change_player()
         else:

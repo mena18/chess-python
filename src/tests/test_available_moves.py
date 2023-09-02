@@ -1,6 +1,6 @@
 from Models.Board import Board
 from Controller.GameLogic import GameLogic, Controller
-from settings import Color
+from settings import Color, GameFlags
 
 
 def test_pond_cant_move_if_pened():
@@ -21,8 +21,12 @@ def test_pond_cant_move_if_pened():
     )
     game_logic = GameLogic(board)
     controller = Controller(board=board, game_logic=game_logic)
-    game_logic.current_player = Color.BLACK
-    controller.get_list_of_available_moves((1, 5))  # clicking on f7
-    assert len(game_logic.list_available_moves) == 0
-    controller.get_list_of_available_moves((0, 1))  # clicking on b8
-    assert len(game_logic.list_available_moves) == 2
+    GameFlags.current_player = Color.BLACK
+    list_available_moves = controller.get_list_of_available_moves(
+        (1, 5)
+    )  # clicking on f7
+    assert len(list_available_moves) == 0
+    list_available_moves = controller.get_list_of_available_moves(
+        (0, 1)
+    )  # clicking on b8
+    assert len(list_available_moves) == 2
