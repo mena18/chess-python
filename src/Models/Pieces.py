@@ -43,9 +43,6 @@ class King(Piece):
             and board.get_piece((7, 6)) is None
         ):
             data.append((7, 6))
-            GameFlags.rock_position_before_castle = (7, 7)
-            GameFlags.rock_position_after_castle = (7, 5)
-
         if (
             GameFlags.current_player == Color.WHITE
             and GameFlags.white_king_can_castle_left
@@ -53,9 +50,6 @@ class King(Piece):
             and board.get_piece((7, 2)) is None
         ):
             data.append((7, 2))
-            GameFlags.rock_position_before_castle = (7, 0)
-            GameFlags.rock_position_after_castle = (7, 3)
-
         if (
             GameFlags.current_player == Color.BLACK
             and GameFlags.black_king_can_castle_left
@@ -63,9 +57,6 @@ class King(Piece):
             and board.get_piece((0, 2)) is None
         ):
             data.append((0, 2))
-            GameFlags.rock_position_before_castle = (0, 0)
-            GameFlags.rock_position_after_castle = (0, 3)
-
         if (
             GameFlags.current_player == Color.BLACK
             and GameFlags.black_king_can_castle_right
@@ -73,9 +64,6 @@ class King(Piece):
             and board.get_piece((0, 6)) is None
         ):
             data.append((0, 6))
-            GameFlags.rock_position_before_castle = (0, 7)
-            GameFlags.rock_position_after_castle = (0, 5)
-
         return data
 
 

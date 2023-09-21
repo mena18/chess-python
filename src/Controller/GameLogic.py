@@ -2,6 +2,7 @@ from Controller.Engine import Engine
 from settings import FenConvertor, Color, GameFlags
 from Models.Board import Board
 from Models.Piece import Piece
+from Models.Position import Position
 
 
 class GameLogic:
@@ -95,14 +96,28 @@ class GameLogic:
         # if it's a castle move made it and end castle
         if self.board.get_piece(pos1).get_type() == "k" and abs(pos1[1] - pos2[1]) == 2:
             king_pos = pos1
-            rock_pos = GameFlags.rock_position_before_castle
+            new_pos1 = Position(pos1)
+            new_pos2 = Position(pos2)
+            if new_pos1 == "e8" and new_pos2 == "g8":
+                rock_position_before_castle = Position("h8").get_as_y_x()
+                rock_position_after_castle = Position("f8").get_as_y_x()
+            elif new_pos1 == "e8" and new_pos2 == "c8":
+                rock_position_before_castle = Position("a8").get_as_y_x()
+                rock_position_after_castle = Position("d8").get_as_y_x()
+            elif new_pos1 == "e1" and new_pos2 == "g1":
+                rock_position_before_castle = Position("h1").get_as_y_x()
+                rock_position_after_castle = Position("f1").get_as_y_x()
+            elif new_pos1 == "e1" and new_pos2 == "c1":
+                rock_position_before_castle = Position("a1").get_as_y_x()
+                rock_position_after_castle = Position("d1").get_as_y_x()
+
             king = self.board.get_piece(king_pos)
-            rock = self.board.get_piece(rock_pos)
+            rock = self.board.get_piece(rock_position_before_castle)
 
             self.board.set_piece(king_pos, None)
-            self.board.set_piece(rock_pos, None)
+            self.board.set_piece(rock_position_before_castle, None)
             self.board.set_piece(pos2, king)
-            self.board.set_piece(GameFlags.rock_position_after_castle, rock)
+            self.board.set_piece(rock_position_after_castle, rock)
             if GameFlags.current_player == Color.WHITE:
                 GameFlags.white_king_can_castle_left = 0
                 GameFlags.white_king_can_castle_right = 0

@@ -21,6 +21,9 @@ class Piece:
     def __str__(self):
         return self.code
 
+    def __repr__(self):
+        return f"{self.code}-{self.color}"
+
 
 class ChessMoves:
     def generate_direct_moves(self, board, position):
