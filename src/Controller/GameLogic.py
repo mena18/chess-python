@@ -3,6 +3,7 @@ from settings import FenConvertor, Color, GameFlags
 from Models.Board import Board
 from Models.Piece import Piece
 from Models.Position import Position
+from Models.PieceFactory import PieceFactory
 
 
 class GameLogic:
@@ -18,8 +19,6 @@ class GameLogic:
 
     def clear_data(self):
         self.list_available_moves = []
-        GameFlags.last_position = None
-        GameFlags.last_piece = None
 
     def suggest_best_move(self):
         fen = self.board.get_fen(GameFlags.current_player)
@@ -37,8 +36,6 @@ class GameLogic:
 
         pos_from, pos_to = Position(move[0:2]), Position(move[2:])
 
-        GameFlags.last_position = pos_from
-        GameFlags.last_piece = self.board.get_piece(pos_from)
         self.execute_movement(pos_from, pos_to)
         self.after_movement_execution(self.board.get_piece(pos_to))
 
@@ -120,15 +117,34 @@ class GameLogic:
             else:
                 GameFlags.black_king_can_castle_left = 0
                 GameFlags.black_king_can_castle_right = 0
-        # if it's just a king or a rock move make castling is 0
 
+        elif (
+            self.board.get_piece(pos1).get_type() == "p"
+            and GameFlags.current_player == Color.WHITE
+            and pos2.y == 0
+        ):
+            self.board.set_piece(pos1, None)
+            queen = PieceFactory.create("Q")
+            self.board.set_piece(pos2, queen)
+        elif (
+            self.board.get_piece(pos1).get_type() == "p"
+            and GameFlags.current_player == Color.BLACK
+            and pos2.y == 7
+        ):
+            self.board.set_piece(pos1, None)
+            queen = PieceFactory.create("q")
+            self.board.set_piece(pos2, queen)
         # if it's a passwn move and x and y changed it's en-passwant
         elif GameFlags.en_passant:
             pass
         else:
             self.board.make_move(pos1, pos2)
 
+        GameFlags.last_position = pos2
+        GameFlags.last_piece = self.board.get_piece(pos2)
+
         # replace with board.make_move
+
         self.board.get_piece(pos2).has_moved_before = True
 
         self.clear_data()

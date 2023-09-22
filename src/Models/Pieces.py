@@ -79,6 +79,7 @@ class Bond(Piece):
         data = []
         y, x = position.get_as_y_x()
 
+        # calculate the two pieces to be captured
         piece_one = board.get_piece(Position((y - 1 * factor, x - 1)))
         if piece_one and piece_one.color != self.color:
             data.append(Position((y - 1 * factor, x - 1)))
@@ -87,11 +88,13 @@ class Bond(Piece):
         if piece_two and piece_two.color != self.color:
             data.append(Position((y - 1 * factor, x + 1)))
 
+        # calculate moving forward one step
         piece = board.get_piece(Position((y - 1 * factor, x)))
         if piece:
             return data
         data.append(Position((y - 1 * factor, x)))
 
+        # calculate moving forward two steps
         if not self.has_moved_before and not board.get_piece(
             Position((y - 2 * factor, x))
         ):
