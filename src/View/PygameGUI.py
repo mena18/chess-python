@@ -7,7 +7,6 @@ from Models.Position import Position
 class PygameGUI:
     def __init__(self, controller):
         self.controller = controller
-        pygame.init()
         self.WIDTH = 800
         self.HEIGHT = 800
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
@@ -44,6 +43,8 @@ class PygameGUI:
         # this contains the list of positions that the current piece can move
         self.list_of_available_moves = []
         self.view_best_move = False
+
+        self.flip_board = False
 
     def clear(self):
         self.last_clicked_position = None
@@ -101,11 +102,18 @@ class PygameGUI:
         pygame.quit()
         exit()
 
+    def get_flipped_pos(self, position):
+        y, x = position
+        if self.flip_board:
+            return (7 - y, 7 - x)
+        else:
+            return (y, x)
+
     def user_action_clicked(self, event):
         x, y = event.pos
         x = x // self.SQUARE_SIZE
         y = y // self.SQUARE_SIZE
-        print(y, x)
+        y, x = self.get_flipped_pos((y, x))
 
         position = Position((y, x))
         piece = self.controller.get_piece_from_pos(position)
@@ -141,6 +149,7 @@ class PygameGUI:
         )
 
     def draw_possible_position(self, position):
+        position = self.get_flipped_pos(position)
         pygame.draw.circle(
             self.screen,
             (20, 85, 30),
@@ -152,6 +161,7 @@ class PygameGUI:
         )
 
     def draw_square(self, position, COLOR=(20, 85, 30)):
+        position = self.get_flipped_pos(position)
         pygame.draw.rect(
             self.screen,
             COLOR,
@@ -168,9 +178,12 @@ class PygameGUI:
             if not piece:
                 continue
             piece_image = self.pieces_images.get(piece.code, 0)
-            self.draw_piece(piece_image, (position.x, position.y))
+            y, x = self.get_flipped_pos((position.y, position.x))
+            self.draw_piece(piece_image, (x, y))
 
     def draw_arrows(self, pos1, pos2):
+        pos1 = self.get_flipped_pos(pos1)
+        pos2 = self.get_flipped_pos(pos2)
         start_pos = (
             pos1[1] * 100 + 50,
             pos1[0] * 100 + 50,

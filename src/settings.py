@@ -11,16 +11,11 @@ INITIAL_BOARD = [
     ["R", "N", "B", "Q", "K", "B", "N", "R"],
 ]
 
-INITIAL_BOARD = [
-    ["r", "n", "b", "", "k", "b", "n", "r"],
-    ["p", "p", "p", "p", "p", "p", "p", "p"],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["P", "P", "P", "P", "P", "P", "P", "P"],
-    ["R", "N", "B", "Q", "K", "B", "N", "R"],
-]
+
+class StartMenuActions(Enum):
+    PLAY_VS_HUMAN = "PLAY_VS_HUMAN"
+    PLAY_AS_WHITE_VS_AI = "PLAY_AS_WHITE_VS_AI"
+    PLAY_AS_BLACK_VS_AI = "PLAY_AS_BLACK_VS_AI"
 
 
 class Color(Enum):
