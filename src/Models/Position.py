@@ -41,5 +41,33 @@ class Position:
             return self.position == object
         return False
 
-        pdb.set_trace()
-        return super.__eq__(self, object)
+    def __getitem__(self, key):
+        return self.position[key]
+
+    @property
+    def y(self):
+        return self.position[0]
+
+    @property
+    def x(self):
+        return self.position[1]
+
+    def up(self, n=1):
+        new_y = max(self.y - n, 0)
+        new_x = self.x
+        return Position((new_y, new_x))
+
+    def down(self, n=1):
+        new_y = min(self.y + n, 7)
+        new_x = self.x
+        return Position((new_y, new_x))
+
+    def right(self, n=1):
+        new_y = self.y
+        new_x = min(self.x + n, 7)
+        return Position((new_y, new_x))
+
+    def left(self, n=1):
+        new_y = self.y
+        new_x = max(self.x - n, 0)
+        return Position((new_y, new_x))

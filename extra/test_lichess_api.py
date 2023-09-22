@@ -25,8 +25,8 @@ def test_database():
     response = api.get(
         f"{LICHESS_HOST}/api/cloud-eval", headers=headers, params=body_data
     )
-    print(response.status_code)
-    print(response.json())
+    # pr(response.status_code)
+    # pr(response.json())
 
 
 def list_chess_engines():
@@ -52,7 +52,7 @@ def generate_chess_engine_id():
 def test_engine_analysis():
     id = os.getenv("CHESS_ENGINE_ID")
     clientSecret = os.getenv("CHESS_ENGINE_CLIENT_SECRET")
-    print(id, clientSecret)
+    # pr(id, clientSecret)
 
     payload = {
         "clientSecret": clientSecret,
@@ -76,5 +76,5 @@ def test_engine_analysis():
 
 
 res = test_engine_analysis()
-print(res.status_code)
-print(res.json())
+# res.status_code
+# res.json()

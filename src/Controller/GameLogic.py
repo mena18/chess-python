@@ -23,7 +23,6 @@ class GameLogic:
 
     def suggest_best_move(self):
         fen = self.board.get_fen(GameFlags.current_player)
-        print("suggest", end="  ")
         try:
             self.engine.set_fen(fen)
             move = self.engine.get_best_move()
@@ -33,17 +32,15 @@ class GameLogic:
 
     def make_computer_move(self):
         fen = self.board.get_fen(GameFlags.current_player)
-        print("play ", end="  ")
         self.engine.set_fen(fen)
         move = self.engine.get_best_move()
 
-        mv1, mv2 = move[0:2], move[2:]
-        mv1 = FenConvertor.from_fen_to_pos(mv1)
-        mv2 = FenConvertor.from_fen_to_pos(mv2)
-        GameFlags.last_position = mv1
-        GameFlags.last_piece = self.board.get_piece(mv1)
-        self.execute_movement(mv1, mv2)
-        self.after_movement_execution(self.board.get_piece(mv2))
+        pos_from, pos_to = Position(move[0:2]), Position(move[2:])
+
+        GameFlags.last_position = pos_from
+        GameFlags.last_piece = self.board.get_piece(pos_from)
+        self.execute_movement(pos_from, pos_to)
+        self.after_movement_execution(self.board.get_piece(pos_to))
 
     def moves_after_removing_check(self, from_pos, list_available_moves, color):
         new_available_list = []
@@ -57,11 +54,11 @@ class GameLogic:
         return new_available_list
 
     def can_the_king_move(self):
-        for y, x, piece in self.board.get_pieces():
+        for position, piece in self.board.get_pieces():
             if piece and piece.color != GameFlags.current_player:
-                moves = piece.generate_moevs(self.board, (y, x))
+                moves = piece.generate_moevs(self.board, position)
                 final_moves = self.moves_after_removing_check(
-                    (y, x), moves, piece.color
+                    position, moves, piece.color
                 )
                 if len(final_moves) > 0:
                     return True
@@ -96,20 +93,19 @@ class GameLogic:
         # if it's a castle move made it and end castle
         if self.board.get_piece(pos1).get_type() == "k" and abs(pos1[1] - pos2[1]) == 2:
             king_pos = pos1
-            new_pos1 = Position(pos1)
-            new_pos2 = Position(pos2)
-            if new_pos1 == "e8" and new_pos2 == "g8":
-                rock_position_before_castle = Position("h8").get_as_y_x()
-                rock_position_after_castle = Position("f8").get_as_y_x()
-            elif new_pos1 == "e8" and new_pos2 == "c8":
-                rock_position_before_castle = Position("a8").get_as_y_x()
-                rock_position_after_castle = Position("d8").get_as_y_x()
-            elif new_pos1 == "e1" and new_pos2 == "g1":
-                rock_position_before_castle = Position("h1").get_as_y_x()
-                rock_position_after_castle = Position("f1").get_as_y_x()
-            elif new_pos1 == "e1" and new_pos2 == "c1":
-                rock_position_before_castle = Position("a1").get_as_y_x()
-                rock_position_after_castle = Position("d1").get_as_y_x()
+
+            if pos1 == "e8" and pos2 == "g8":
+                rock_position_before_castle = Position("h8")
+                rock_position_after_castle = Position("f8")
+            elif pos1 == "e8" and pos2 == "c8":
+                rock_position_before_castle = Position("a8")
+                rock_position_after_castle = Position("d8")
+            elif pos1 == "e1" and pos2 == "g1":
+                rock_position_before_castle = Position("h1")
+                rock_position_after_castle = Position("f1")
+            elif pos1 == "e1" and pos2 == "c1":
+                rock_position_before_castle = Position("a1")
+                rock_position_after_castle = Position("d1")
 
             king = self.board.get_piece(king_pos)
             rock = self.board.get_piece(rock_position_before_castle)
@@ -139,7 +135,6 @@ class GameLogic:
 
     def after_movement_execution(self, piece: Piece):
         piece.has_moved_before = True
-        print("can the king move", self.can_the_king_move())
         if self.can_the_king_move():
             self.change_player()
         else:

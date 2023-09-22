@@ -36,4 +36,3 @@ board = [
 ]
 
 fen = generate_fen(board)
-print(fen)

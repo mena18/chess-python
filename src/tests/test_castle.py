@@ -24,7 +24,7 @@ def test_castle():
             ["R", "", "", "", "K", "", "", "R"],
         ]
     )
-    list_of_moves = controller.get_list_of_available_moves(black_king_pos.get_as_y_x())
+    list_of_moves = controller.get_list_of_available_moves(black_king_pos)
     assert len(list_of_moves) == 4
 
 
@@ -32,9 +32,9 @@ def test_black_castle_right():
     board = Board()
     game_logic = GameLogic(board)
     controller = Controller(board=board, game_logic=game_logic)
-    black_king_pos = Position("e8").get_as_y_x()
-    black_king_to_pos = Position("g8").get_as_y_x()
-    rock_new_pos = Position("f8").get_as_y_x()
+    black_king_pos = Position("e8")
+    black_king_to_pos = Position("g8")
+    rock_new_pos = Position("f8")
 
     board.set_board(
         [
@@ -57,9 +57,9 @@ def test_black_castle_left():
     board = Board()
     game_logic = GameLogic(board)
     controller = Controller(board=board, game_logic=game_logic)
-    black_king_pos = Position("e8").get_as_y_x()
-    black_king_to_pos = Position("c8").get_as_y_x()
-    rock_new_pos = Position("d8").get_as_y_x()
+    black_king_pos = Position("e8")
+    black_king_to_pos = Position("c8")
+    rock_new_pos = Position("d8")
 
     board.set_board(
         [
@@ -82,9 +82,9 @@ def test_white_castle_right():
     board = Board()
     game_logic = GameLogic(board)
     controller = Controller(board=board, game_logic=game_logic)
-    black_king_pos = Position("e1").get_as_y_x()
-    black_king_to_pos = Position("g1").get_as_y_x()
-    rock_new_pos = Position("f1").get_as_y_x()
+    black_king_pos = Position("e1")
+    black_king_to_pos = Position("g1")
+    rock_new_pos = Position("f1")
 
     board.set_board(
         [
@@ -107,9 +107,9 @@ def test_white_castle_left():
     board = Board()
     game_logic = GameLogic(board)
     controller = Controller(board=board, game_logic=game_logic)
-    black_king_pos = Position("e1").get_as_y_x()
-    black_king_to_pos = Position("c1").get_as_y_x()
-    rock_new_pos = Position("d1").get_as_y_x()
+    black_king_pos = Position("e1")
+    black_king_to_pos = Position("c1")
+    rock_new_pos = Position("d1")
 
     board.set_board(
         [

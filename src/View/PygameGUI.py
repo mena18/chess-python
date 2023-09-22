@@ -1,6 +1,7 @@
 import os
 import pygame
 from settings import GameFlags
+from Models.Position import Position
 
 
 class PygameGUI:
@@ -106,7 +107,7 @@ class PygameGUI:
         y = y // self.SQUARE_SIZE
         print(y, x)
 
-        position = (y, x)
+        position = Position((y, x))
         piece = self.controller.get_piece_from_pos(position)
 
         if piece and piece.color == self.controller.get_current_player():
@@ -163,11 +164,11 @@ class PygameGUI:
         )
 
     def draw_board(self, board):
-        for y, x, piece in board.get_pieces():
+        for position, piece in board.get_pieces():
             if not piece:
                 continue
             piece_image = self.pieces_images.get(piece.code, 0)
-            self.draw_piece(piece_image, (x, y))
+            self.draw_piece(piece_image, (position.x, position.y))
 
     def draw_arrows(self, pos1, pos2):
         start_pos = (

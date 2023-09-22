@@ -11,6 +11,17 @@ INITIAL_BOARD = [
     ["R", "N", "B", "Q", "K", "B", "N", "R"],
 ]
 
+INITIAL_BOARD = [
+    ["r", "n", "b", "", "k", "b", "n", "r"],
+    ["p", "p", "p", "p", "p", "p", "p", "p"],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["P", "P", "P", "P", "P", "P", "P", "P"],
+    ["R", "N", "B", "Q", "K", "B", "N", "R"],
+]
+
 
 class Color(Enum):
     BLACK = "black"
@@ -27,8 +38,8 @@ class Pieces(Enum):
 
 
 # White is capital letter while black is small
-def get_color_from_type(color: Pieces) -> Color:
-    if color.value.isupper():
+def get_color_from_type(piece: Pieces) -> Color:
+    if piece.value.isupper():
         return Color.WHITE
     return Color.BLACK
 

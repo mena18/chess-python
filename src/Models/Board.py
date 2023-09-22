@@ -1,6 +1,8 @@
 from Models.PieceFactory import PieceFactory
 from copy import deepcopy
 from settings import Color, Pieces, INITIAL_BOARD, GameFlags
+from Models.Position import Position
+from Models.Piece import Piece
 
 
 class Board:
@@ -51,7 +53,7 @@ class Board:
     def get_pieces(self):
         for y, row in enumerate(self.board):
             for x, piece in enumerate(row):
-                yield (y, x, piece)
+                yield (Position((y, x)), piece)
 
     # create board from array of pieces
     # TODO i should create another one to create board from fen
@@ -64,27 +66,27 @@ class Board:
                 else:
                     self.board[x][y] = None
 
-    def get_piece(self, position):
-        y, x = position
+    def get_piece(self, position: Position):
+        y, x = position.get_as_y_x()
         return self.board[y][x] if (y >= 0 and y < 8 and x >= 0 and x < 8) else None
 
-    def set_piece(self, position, piece):
-        y, x = position
+    def set_piece(self, position: Position, piece):
+        y, x = position.get_as_y_x()
         self.board[y][x] = piece
 
     def is_king_in_check(self, color):
-        king_y, king_x = self.get_king_position(color)
-        for y, x, piece in self.get_pieces():
+        king_position = self.get_king_position(color)
+        for position, piece in self.get_pieces():
             if piece and piece.color != color:
-                moves = piece.generate_moevs(self, (y, x))
-                if (king_y, king_x) in moves:
+                moves = piece.generate_moevs(self, position)
+                if king_position in moves:
                     return True
         return False
 
     def get_king_position(self, color):
-        for y, x, piece in self.get_pieces():
+        for position, piece in self.get_pieces():
             if piece and piece.get_type() == Pieces.KING.value and piece.color == color:
-                return (y, x)
+                return position
 
     def make_move(self, from_pos, to_pos):
         self.set_piece(to_pos, self.get_piece(from_pos))

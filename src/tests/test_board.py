@@ -48,11 +48,11 @@ def test_king_in_check():
 def test_draw_all_pieces():
     board = Board()
     lis_1 = []
+    for position, piece in board.get_pieces():
+        lis_1.append((position, piece))
+    lis_2 = []
     for y, row in enumerate(board.board):
         for x, piece in enumerate(row):
-            lis_1.append((y, x, piece))
-    lis_2 = []
-    for y, x, piece in board.get_pieces():
-        lis_2.append((y, x, piece))
+            lis_2.append((y, x, piece))
 
     assert lis_1 == lis_2

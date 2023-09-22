@@ -1,4 +1,5 @@
 from settings import Color
+from Models.Position import Position
 
 
 class Piece:
@@ -13,7 +14,7 @@ class Piece:
     def color(self):
         return Color.BLACK if self.code.islower() else Color.WHITE
 
-    def generate_moevs(self, board, position):
+    def generate_moevs(self, board, position: Position):
         if self.color == Color.WHITE:
             return [(position[0] - 1, position[1]), (position[0] - 2, position[1])]
         return [(position[0] + 1, position[1]), (position[0] + 2, position[1])]
@@ -26,9 +27,9 @@ class Piece:
 
 
 class ChessMoves:
-    def generate_direct_moves(self, board, position):
+    def generate_direct_moves(self, board, position: Position):
         data = []
-        y, x = position
+        y, x = position.get_as_y_x()
         directions_x = [1, -1, 0, 0]
         directions_y = [0, 0, 1, -1]
 
@@ -36,7 +37,7 @@ class ChessMoves:
             new_x = x + directions_x[direction]
             new_y = y + directions_y[direction]
             while new_x < 8 and new_x >= 0 and new_y >= 0 and new_y < 8:
-                new_pos = (new_y, new_x)
+                new_pos = Position((new_y, new_x))
                 piece = board.get_piece(new_pos)
                 if piece:
                     if piece.color != self.color:
@@ -48,9 +49,9 @@ class ChessMoves:
 
         return data
 
-    def generate_diagonal_moves(self, board, position):
+    def generate_diagonal_moves(self, board, position: Position):
         data = []
-        y, x = position
+        y, x = position.get_as_y_x()
         directions_x = [1, -1, 1, -1]
         directions_y = [1, 1, -1, -1]
 
@@ -58,7 +59,7 @@ class ChessMoves:
             new_x = x + directions_x[direction]
             new_y = y + directions_y[direction]
             while new_x < 8 and new_x >= 0 and new_y >= 0 and new_y < 8:
-                new_pos = (new_y, new_x)
+                new_pos = Position((new_y, new_x))
                 piece = board.get_piece(new_pos)
                 if piece:
                     if piece.color != self.color:
